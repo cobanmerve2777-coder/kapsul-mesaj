@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Kapsül Mesaj</title>
+</head>
+<body>
+
+<h1>Kapsül Mesaj Oluştur</h1>
+{% if messages %}
+  {% for message in messages %}
+<div style="background-color: #d4edda; color: #155724; padding: 10px; border-radius: 5px; margin-bottom: 15px;">
+    {{ message }}
+</div>
+  {% endfor %}
+{% endif %}
+
+<form method="POST">
+    {% csrf_token %}
+
+    <label>Başlık:</label><br>
+    <input type="text" name="baslik" required>
+    <br><br>
+
+    <label>Mesaj:</label><br>
+    <textarea name="icerik" required></textarea>
+    <br><br>
+
+    <label>Açılma Tarihi:</label><br>
+    <input type="datetime-local" name="acilma_tarihi">
+    <br><br>
+
+    <button type="submit">Gönder</button>
+</form>
+
+</body>
+</html>
+
+
+
