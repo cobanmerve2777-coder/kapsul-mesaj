@@ -1,0 +1,373 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kapsül Açıldı | {{ mesaj.baslik|default:"Mesajınız Var" }}</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+
+    <style>
+        *{ margin:0; padding:0; box-sizing:border-box; }
+
+        :root{
+            --bg-color: #0d0f1a;
+            --text-main: #ffffff;
+            --text-muted: rgba(255, 255, 255, 0.6);
+            --accent: #6d83ff;
+            --card-bg: rgba(255, 255, 255, 0.03);
+            --line: rgba(255, 255, 255, 0.08);
+            --gradient: linear-gradient(135deg, #7a8fff 0%, #5266ff 100%);
+        }
+
+        body{
+            min-height: 100vh;
+            font-family: 'Inter', sans-serif;
+            color: var(--text-main);
+            background-color: var(--bg-color);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 40px 20px;
+            overflow-x: hidden;
+        }
+
+        .bg-video{
+            position: fixed;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            z-index: -2;
+            opacity: 0.4;
+        }
+
+        .overlay {
+            position: fixed;
+            inset: 0;
+            background: radial-gradient(circle at center, transparent 0%, var(--bg-color) 100%);
+            z-index: -1;
+        }
+
+        .page{
+            position: relative;
+            z-index: 1;
+            width: 100%;
+            max-width: 1100px;
+        }
+
+        .main-card{
+            background: var(--card-bg);
+            border: 1px solid var(--line);
+            border-radius: 40px;
+            padding: 50px;
+            backdrop-filter: blur(25px);
+            box-shadow: 0 40px 100px rgba(0,0,0,0.5);
+        }
+
+        .top-badge{
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 16px;
+            border-radius: 100px;
+            background: rgba(109, 131, 255, 0.1);
+            border: 1px solid rgba(109, 131, 255, 0.2);
+            color: var(--accent);
+            font-size: 11px;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 30px;
+        }
+
+        .top-badge .dot{
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #6d83ff;
+            box-shadow: 0 0 10px #6d83ff;
+        }
+
+        .hero-text h1{
+            font-size: 64px;
+            font-weight: 900;
+            line-height: 1.05;
+            letter-spacing: -3px;
+            margin-bottom: 20px;
+            color: #f4f7ff;
+        }
+
+        .hero-text p{
+            font-size: 18px;
+            color: var(--text-muted);
+            max-width: 700px;
+            line-height: 1.6;
+            margin-bottom: 40px;
+        }
+
+        .content-grid{
+            display: grid;
+            grid-template-columns: 320px 1fr;
+            gap: 30px;
+        }
+
+        .side-card{
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid var(--line);
+            border-radius: 24px;
+            padding: 30px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .section-label{
+            font-size: 11px;
+            font-weight: 800;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 5px;
+        }
+
+        .message-title{
+            font-size: 28px;
+            font-weight: 900;
+        }
+
+        .meta-box{
+            margin-top: 20px;
+            border-top: 1px solid var(--line);
+            padding-top: 20px;
+        }
+
+        .meta-row{ margin-bottom: 15px; }
+        .meta-name{ font-size: 10px; font-weight: 800; color: var(--text-muted); text-transform: uppercase; }
+        .meta-value{ font-size: 14px; font-weight: 600; }
+
+        .message-card{
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .image-wrap{
+            width: 100%;
+            border-radius: 24px;
+            overflow: hidden;
+            border: 1px solid var(--line);
+        }
+
+        .image-wrap img{
+            width: 100%;
+            max-height: 500px;
+            object-fit: cover;
+        }
+
+        .no-image{
+            height: 150px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-muted);
+        }
+
+        .text-box{
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--line);
+            border-radius: 24px;
+            padding: 30px;
+        }
+
+        .text-box p{
+            font-size: 18px;
+            line-height: 1.8;
+        }
+
+        .audio-box{
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--line);
+            border-radius: 24px;
+            padding: 20px;
+        }
+
+        .audio-header{
+            font-size: 13px;
+            font-weight: 700;
+            color: var(--text-muted);
+            margin-bottom: 10px;
+        }
+
+        .audio-box audio{
+            width: 100%;
+        }
+
+        .footer-actions{
+            margin-top: 10px;
+            display: flex;
+            gap: 15px;
+        }
+
+        .btn{
+            flex: 1;
+            height: 55px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 14px;
+            text-decoration: none;
+            font-weight: 700;
+        }
+
+        .btn-primary{
+            background: var(--gradient);
+            color: white;
+        }
+
+        .btn-secondary{
+            background: rgba(255,255,255,0.05);
+            border: 1px solid var(--line);
+            color: white;
+        }
+
+        /* 📱 MOBILE FIX */
+        @media (max-width: 900px){
+            .content-grid{
+                grid-template-columns: 1fr;
+            }
+
+            .side-card{
+                padding: 20px;
+            }
+        }
+
+        @media (max-width: 600px){
+            body{
+                padding: 20px 10px;
+            }
+
+            .main-card{
+                padding: 20px;
+                border-radius: 24px;
+            }
+
+            .hero-text h1{
+                font-size: 34px;
+                letter-spacing: -1px;
+            }
+
+            .hero-text p{
+                font-size: 14px;
+            }
+
+            .text-box p{
+                font-size: 15px;
+                line-height: 1.6;
+            }
+
+            .audio-box{
+                padding: 15px;
+            }
+
+            .footer-actions{
+                flex-direction: column;
+            }
+
+            .btn{
+                width: 100%;
+            }
+
+            .top-badge{
+                font-size: 9px;
+                padding: 6px 12px;
+            }
+
+            .bg-video{
+                display: none;
+            }
+
+            body{
+                background: #0d0f1a;
+            }
+        }
+
+    </style>
+</head>
+
+<body>
+
+<video autoplay muted loop playsinline class="bg-video">
+    <source src="{% static 'videos/slow.mp4' %}" type="video/mp4">
+</video>
+
+<div class="overlay"></div>
+
+<main class="page">
+<div class="main-card">
+
+<div class="top-badge">
+    <span class="dot"></span>
+    Kapsül Açıldı
+</div>
+
+<div class="hero-text">
+    <h1>Mühür Çözüldü</h1>
+    <p>Mesajın artık erişilebilir.</p>
+</div>
+
+<div class="content-grid">
+
+<aside class="side-card">
+    <div class="message-title">{{ mesaj.baslik }}</div>
+
+    <div class="meta-box">
+        <div class="meta-row">
+            <div class="meta-name">Gönderen</div>
+            <div class="meta-value">{{ mesaj.gonderen.username }}</div>
+        </div>
+
+        <div class="meta-row">
+            <div class="meta-name">Açılma</div>
+            <div class="meta-value">{{ mesaj.acilma_tarihi }}</div>
+        </div>
+    </div>
+</aside>
+
+<section class="message-card">
+
+<div class="image-wrap">
+{% if mesaj.foto %}
+<img src="{{ mesaj.foto.url }}">
+{% else %}
+<div class="no-image">Görsel yok</div>
+{% endif %}
+</div>
+
+<div class="text-box">
+<p>{{ mesaj.icerik }}</p>
+</div>
+
+{% if mesaj.audio %}
+<div class="audio-box">
+    <div class="audio-header">🎧 Sesli Mesaj</div>
+    <audio controls>
+        <source src="{{ mesaj.audio.url }}" type="audio/webm">
+    </audio>
+</div>
+{% endif %}
+
+<div class="footer-actions">
+<a href="/" class="btn btn-secondary">Ana Sayfa</a>
+<a href="{% url 'mesajlar:mesaj_olustur' %}" class="btn btn-primary">Yeni Mesaj</a>
+</div>
+
+</section>
+</div>
+
+</div>
+</main>
+
+</body>
+</html>

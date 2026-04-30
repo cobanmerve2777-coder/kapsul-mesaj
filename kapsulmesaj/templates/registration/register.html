@@ -1,0 +1,379 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kayıt Ol</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <style>
+        *{
+            margin:0;
+            padding:0;
+            box-sizing:border-box;
+        }
+
+        html, body{
+            width:100%;
+            height:100%;
+            font-family:'Inter', sans-serif;
+            overflow:hidden;
+            color:white;
+        }
+
+        body{
+            position:relative;
+            background:#050814;
+        }
+
+        .bg-video{
+            position:fixed;
+            inset:0;
+            width:100%;
+            height:100%;
+            object-fit:cover;
+            z-index:0;
+        }
+
+        .bg-overlay{
+            position:fixed;
+            inset:0;
+            background:
+                linear-gradient(to right, rgba(5,8,20,.82) 0%, rgba(5,8,20,.58) 38%, rgba(5,8,20,.70) 100%),
+                radial-gradient(circle at 20% 30%, rgba(73, 119, 255, .16), transparent 30%),
+                radial-gradient(circle at 80% 70%, rgba(93, 211, 255, .10), transparent 28%);
+            z-index:1;
+        }
+
+        .page{
+            position:relative;
+            z-index:2;
+            width:100%;
+            height:100%;
+            display:flex;
+            align-items:center;
+            justify-content:center;
+            padding:40px;
+        }
+
+        .content{
+            width:100%;
+            max-width:1180px;
+            display:grid;
+            grid-template-columns: 1.1fr 460px;
+            gap:60px;
+            align-items:center;
+        }
+
+        .hero{
+            max-width:620px;
+        }
+
+        .hero-badge{
+            display:inline-flex;
+            align-items:center;
+            gap:8px;
+            padding:10px 16px;
+            border-radius:999px;
+            border:1px solid rgba(255,255,255,.14);
+            background:rgba(255,255,255,.06);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            color:rgba(255,255,255,.9);
+            font-size:.95rem;
+            font-weight:600;
+            margin-bottom:24px;
+            box-shadow:0 8px 28px rgba(0,0,0,.18);
+        }
+
+        .hero h1{
+            font-size:4.2rem;
+            line-height:.98;
+            letter-spacing:-2px;
+            font-weight:800;
+            margin-bottom:24px;
+        }
+
+        .hero h1 span{
+            color:#78a8ff;
+        }
+
+        .hero p{
+            font-size:1.28rem;
+            line-height:1.7;
+            color:rgba(255,255,255,.78);
+            max-width:640px;
+        }
+
+        .auth-card{
+            width:100%;
+            border-radius:28px;
+            padding:34px 28px 24px;
+            background:rgba(6, 18, 42, 0.72);
+            border:1px solid rgba(255,255,255,.10);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            box-shadow:
+                0 20px 60px rgba(0,0,0,.38),
+                inset 0 1px 0 rgba(255,255,255,.05);
+        }
+
+        .auth-card h2{
+            text-align:center;
+            font-size:2.2rem;
+            font-weight:800;
+            margin-bottom:8px;
+            letter-spacing:-1px;
+        }
+
+        .auth-card .sub{
+            text-align:center;
+            color:rgba(255,255,255,.68);
+            margin-bottom:26px;
+            font-size:1rem;
+        }
+
+        .form-group{
+            margin-bottom:16px;
+        }
+
+        .label{
+            display:block;
+            margin-bottom:8px;
+            font-size:.95rem;
+            font-weight:600;
+            color:rgba(255,255,255,.92);
+        }
+
+        .input{
+            width:100%;
+            height:58px;
+            border:none;
+            outline:none;
+            border-radius:16px;
+            padding:0 18px;
+            font-size:1rem;
+            color:#fff;
+            background:rgba(255,255,255,.10);
+            border:1px solid rgba(255,255,255,.08);
+            transition:.25s ease;
+        }
+
+        .input::placeholder{
+            color:rgba(255,255,255,.40);
+        }
+
+        .input:focus{
+            border-color:rgba(120,168,255,.55);
+            background:rgba(255,255,255,.12);
+            box-shadow:0 0 0 4px rgba(120,168,255,.10);
+        }
+
+        .btn{
+            width:100%;
+            height:58px;
+            border:none;
+            border-radius:16px;
+            margin-top:6px;
+            font-size:1.05rem;
+            font-weight:700;
+            color:white;
+            cursor:pointer;
+            background:linear-gradient(90deg, #5b8cff 0%, #78a8ff 100%);
+            box-shadow:0 12px 30px rgba(87, 133, 255, .28);
+            transition:.25s ease;
+        }
+
+        .btn:hover{
+            transform:translateY(-2px);
+            box-shadow:0 16px 36px rgba(87, 133, 255, .34);
+        }
+
+        .bottom-text{
+            margin-top:18px;
+            text-align:center;
+            color:rgba(255,255,255,.74);
+            font-size:.96rem;
+        }
+
+        .bottom-text a{
+            color:white;
+            text-decoration:none;
+            font-weight:700;
+        }
+
+        .bottom-text a:hover{
+            text-decoration:underline;
+        }
+
+        .messages{
+            list-style:none;
+            margin-bottom:14px;
+            padding:0;
+        }
+
+        .messages li{
+            margin-bottom:10px;
+            padding:12px 14px;
+            border-radius:12px;
+            background:rgba(255, 90, 90, 0.12);
+            border:1px solid rgba(255,255,255,.08);
+            color:#ffd3d3;
+            font-size:.92rem;
+        }
+
+        @media (max-width: 980px){
+            .content{
+                grid-template-columns:1fr;
+                gap:32px;
+                max-width:560px;
+            }
+
+            .hero{
+                text-align:center;
+                max-width:none;
+            }
+
+            .hero h1{
+                font-size:3rem;
+            }
+
+            .hero p{
+                margin:0 auto;
+                font-size:1.08rem;
+            }
+        }
+
+        @media (max-width: 640px){
+            .page{
+                padding:18px;
+            }
+
+            .hero h1{
+                font-size:2.35rem;
+                letter-spacing:-1px;
+            }
+
+            .hero p{
+                font-size:1rem;
+                line-height:1.6;
+            }
+
+            .auth-card{
+                padding:26px 18px 20px;
+                border-radius:22px;
+            }
+
+            .auth-card h2{
+                font-size:1.8rem;
+            }
+
+            .input,
+            .btn{
+                height:54px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <video class="bg-video" autoplay muted loop playsinline>
+        <source src="{% static 'videos/login-bg.mp4' %}" type="video/mp4">
+    </video>
+
+    <div class="bg-overlay"></div>
+
+    <div class="page">
+        <div class="content">
+
+            <div class="hero">
+                <div class="hero-badge">Kapsül Mesaj Sistemi</div>
+                <h1>Geleceğe bırakılan <span>mesajlara</span> sen de katıl</h1>
+                <p>
+                    Kendine ya da sevdiklerine zaman ayarlı mesajlar bırak,
+                    gelecekte açılacak özel anılar oluştur ve kapsül içeriklerini güvenle sakla.
+                </p>
+            </div>
+
+            <div class="auth-card">
+                <h2>Kayıt Ol</h2>
+                <div class="sub">Hesabını oluştur ve kapsül mesajlarını yönetmeye başla</div>
+
+                {% if messages %}
+                    <ul class="messages">
+                        {% for message in messages %}
+                            <li>{{ message }}</li>
+                        {% endfor %}
+                    </ul>
+                {% endif %}
+
+                <form method="post">
+                    {% csrf_token %}
+
+                    <div class="form-group">
+                        <label class="label">Kullanıcı adı</label>
+                        <input
+                            type="text"
+                            name="username"
+                            class="input"
+                            placeholder="Kullanıcı adın"
+                            value="{{ old_username|default:'' }}"
+                            required
+                        >
+                    </div>
+
+                    <div class="form-group">
+                        <label class="label">E-posta</label>
+                        <input
+                            type="email"
+                            name="email"
+                            class="input"
+                            placeholder="E-posta adresin"
+                            value="{{ old_email|default:'' }}"
+                            required
+                        >
+                    </div>
+
+                    <div class="form-group">
+                        <label class="label">Parola</label>
+                        <input
+                            type="password"
+                            name="password1"
+                            class="input"
+                            placeholder="Parolanı oluştur"
+                            required
+                        >
+                    </div>
+
+                    <div class="form-group">
+                        <label class="label">Parola tekrar</label>
+                        <input
+                            type="password"
+                            name="password2"
+                            class="input"
+                            placeholder="Parolanı tekrar yaz"
+                            required
+                        >
+                    </div>
+
+                    {% if next %}
+                        <input type="hidden" name="next" value="{{ next }}">
+                    {% endif %}
+
+                    <button type="submit" class="btn">Kayıt Ol</button>
+                </form>
+
+                <div class="bottom-text">
+                    Zaten hesabın var mı? <a href="{% url 'mesajlar:login' %}">Giriş Yap</a>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+</body>
+</html>
