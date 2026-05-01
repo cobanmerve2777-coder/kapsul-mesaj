@@ -1,1 +1,1 @@
-web: gunicorn kapsulmesaj.wsgi:application
+web: gunicorn --chdir kapsulmesaj/kapsulmesaj kapsulmesaj.wsgi:application
