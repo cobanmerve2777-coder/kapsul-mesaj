@@ -1,2 +1,3 @@
-web: gunicorn kapsulmesaj.kapsulmesaj.wsgi:application
+web: gunicorn kapsulmesaj.wsgi:application
+
 
