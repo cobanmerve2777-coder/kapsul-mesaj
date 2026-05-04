@@ -127,6 +127,13 @@ CSRF_TRUSTED_ORIGINS = [
     if origin.strip()
 ]
 
+# Add Railway domain to CSRF trusted origins
+if not CSRF_TRUSTED_ORIGINS:
+    CSRF_TRUSTED_ORIGINS = [
+        "https://kapsul-mesaj-production.up.railway.app",
+        "http://kapsul-mesaj-production.up.railway.app",
+    ]
+
 SESSION_COOKIE_SECURE = not DEBUG
 CSRF_COOKIE_SECURE = not DEBUG
 SECURE_SSL_REDIRECT = not DEBUG
