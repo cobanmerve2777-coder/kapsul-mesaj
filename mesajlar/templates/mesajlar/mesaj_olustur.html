@@ -1,39 +1,275 @@
+{% load static %}
 <!DOCTYPE html>
-<html>
+<html lang="tr">
 <head>
-    <title>Kapsül Mesaj</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kapsül Mesaj | Mesaj Oluştur</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+
+    <style>
+        *{ margin:0; padding:0; box-sizing:border-box; outline: none; }
+
+        :root{
+            --bg-color: #0d0f1a; /* Ana sayfandaki koyu ton */
+            --text-main: #ffffff;
+            --text-muted: rgba(255, 255, 255, 0.7);
+            --accent-blue: #6d83ff;
+            --card-bg: rgba(255, 255, 255, 0.03);
+            --input-border: rgba(255, 255, 255, 0.1);
+        }
+
+        body{
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 40px 20px;
+            overflow-x: hidden;
+        }
+
+        /* --- Arkaplan Tasarımı --- */
+        .bg-video{
+            position: fixed;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            z-index: -2;
+            opacity: 0.6;
+        }
+
+        .overlay {
+            position: fixed;
+            inset: 0;
+            background: radial-gradient(circle at center, transparent 0%, var(--bg-color) 100%);
+            z-index: -1;
+        }
+
+        /* --- Çıkış Butonu (Sağ Üst - Senin Stilinde) --- */
+        .logout-wrapper {
+            position: fixed;
+            top: 25px;
+            right: 25px;
+            z-index: 100;
+        }
+
+        .logout-btn {
+            padding: 10px 20px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            color: var(--text-main);
+            text-decoration: none;
+            font-size: 13px;
+            font-weight: 600;
+            transition: 0.3s;
+        }
+
+        .logout-btn:hover {
+            background: rgba(255, 80, 80, 0.2);
+            border-color: rgba(255, 80, 80, 0.3);
+        }
+
+        /* --- Ana Düzen --- */
+        .container {
+            width: 100%;
+            max-width: 1100px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 60px;
+            align-items: center;
+        }
+
+        /* Sol Taraf: Dev Başlık (Görseldeki Stilde) */
+        .hero-text h1 {
+            font-size: 68px;
+            font-weight: 900;
+            line-height: 1.1;
+            letter-spacing: -2px;
+            margin-bottom: 20px;
+        }
+
+        .hero-text p {
+            font-size: 18px;
+            color: var(--text-muted);
+            line-height: 1.6;
+            max-width: 450px;
+        }
+
+        /* --- Sağ Taraf: Modern Form Kartı --- */
+        .form-card {
+            background: var(--card-bg);
+            border: 1px solid var(--input-border);
+            border-radius: 24px;
+            padding: 40px;
+            backdrop-filter: blur(20px);
+            box-shadow: 0 25px 50px rgba(0,0,0,0.3);
+        }
+
+        .form-card h2 {
+            font-size: 28px;
+            font-weight: 800;
+            margin-bottom: 30px;
+            letter-spacing: -1px;
+        }
+
+        .input-group {
+            margin-bottom: 20px;
+        }
+
+        .input-group label {
+            display: block;
+            font-size: 12px;
+            font-weight: 700;
+            text-transform: uppercase;
+            color: var(--text-muted);
+            margin-bottom: 8px;
+            letter-spacing: 1px;
+        }
+
+        input, textarea {
+            width: 100%;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--input-border);
+            border-radius: 12px;
+            padding: 14px 16px;
+            color: white;
+            font-family: inherit;
+            font-size: 15px;
+            transition: 0.3s;
+        }
+
+        input:focus, textarea:focus {
+            background: rgba(255, 255, 255, 0.08);
+            border-color: var(--accent-blue);
+        }
+
+        /* Dosya Yükleme Alanı */
+        .file-upload {
+            position: relative;
+            background: rgba(255, 255, 255, 0.03);
+            border: 2px dashed var(--input-border);
+            border-radius: 12px;
+            padding: 20px;
+            text-align: center;
+            cursor: pointer;
+        }
+
+        .file-upload input {
+            position: absolute;
+            inset: 0;
+            opacity: 0;
+            cursor: pointer;
+        }
+
+        /* Buton (Ana Sayfandaki Mesaj Oluştur Butonuyla Aynı) */
+        .btn-submit {
+            width: 100%;
+            height: 55px;
+            background: linear-gradient(135deg, #7a8fff 0%, #5266ff 100%);
+            border: none;
+            border-radius: 14px;
+            color: white;
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+            margin-top: 10px;
+            transition: transform 0.2s, box-shadow 0.2s;
+            box-shadow: 0 10px 20px rgba(82, 102, 255, 0.3);
+        }
+
+        .btn-submit:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 15px 30px rgba(82, 102, 255, 0.4);
+        }
+
+        /* Mobil Uyumluluk */
+        @media (max-width: 900px) {
+            .container { grid-template-columns: 1fr; text-align: center; gap: 40px; }
+            .hero-text h1 { font-size: 48px; }
+            .hero-text p { margin: 0 auto; }
+            .logout-wrapper { top: 15px; right: 15px; }
+        }
+    </style>
 </head>
 <body>
 
-<h1>Kapsül Mesaj Oluştur</h1>
-{% if messages %}
-  {% for message in messages %}
-<div style="background-color: #d4edda; color: #155724; padding: 10px; border-radius: 5px; margin-bottom: 15px;">
-    {{ message }}
-</div>
-  {% endfor %}
-{% endif %}
+    <div class="logout-wrapper">
+        <a href="{% url 'logout' %}" class="logout-btn">Çıkış Yap</a>
+    </div>
 
-<form method="POST">
-    {% csrf_token %}
+    <video autoplay muted loop playsinline class="bg-video">
+        <source src="{% static 'videos/login-bg.mp4' %}" type="video/mp4">
+    </video>
+    <div class="overlay"></div>
 
-    <label>Başlık:</label><br>
-    <input type="text" name="baslik" required>
-    <br><br>
+    <main class="container">
+        
+        <section class="hero-text">
+            <div style="background: rgba(255,255,255,0.08); display: inline-block; padding: 6px 15px; border-radius: 100px; font-size: 11px; font-weight: 700; margin-bottom: 20px; border: 1px solid rgba(255,255,255,0.1);">
+                ✦ DİJİTAL ZAMAN KAPSÜLÜ
+            </div>
+            <h1>Geleceğe Bir<br>Mesaj Bırak</h1>
+            <p>Sevdiklerine veya gelecekteki kendine unutulmaz bir sürpriz hazırla. Zamanı geldiğinde kapsülün kendiliğinden açılacak.</p>
+        </section>
 
-    <label>Mesaj:</label><br>
-    <textarea name="icerik" required></textarea>
-    <br><br>
+        <section class="form-card">
+            <h2>Mesajını Oluştur</h2>
+            
+            <form method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
+                
+                <div class="input-group">
+                    <label>Başlık</label>
+                    <input type="text" name="baslik" placeholder="Kapsül adı..." value="{{ form_data.baslik|default:'' }}">
+                </div>
 
-    <label>Açılma Tarihi:</label><br>
-    <input type="datetime-local" name="acilma_tarihi">
-    <br><br>
+                <div class="input-group">
+                    <label>Alıcı E-posta</label>
+                    <input type="email" name="alici_email" placeholder="ornek@mail.com" required value="{{ form_data.alici_email|default:'' }}">
+                </div>
 
-    <button type="submit">Gönder</button>
-</form>
+                <div class="input-group">
+                    <label>Açılma Tarihi</label>
+                    <input type="datetime-local" name="acilma_tarihi" required value="{{ form_data.acilma_tarihi|default:'' }}">
+                </div>
+
+                <div class="input-group">
+                    <label>Fotoğraf</label>
+                    <div class="file-upload">
+                        <input type="file" name="foto" id="foto">
+                        <span id="fileName" style="font-size: 13px; color: var(--text-muted);">Görsel Seç (Opsiyonel)</span>
+                    </div>
+                </div>
+
+                <div class="input-group">
+                    <label>Mesajın</label>
+                    <textarea name="icerik" id="icerik" maxlength="1000" rows="4" placeholder="Geleceğe notunu yaz..." required>{{ form_data.icerik|default:'' }}</textarea>
+                </div>
+
+                <button type="submit" class="btn-submit">Kapsülü Mühürle</button>
+            </form>
+        </section>
+
+    </main>
+
+    <script>
+        // Dosya ismi gösterme ve karakter sınırı için küçük bir dokunuş
+        const fileInput = document.getElementById('foto');
+        const fileName = document.getElementById('fileName');
+        
+        fileInput.addEventListener('change', () => {
+            if(fileInput.files.length > 0) {
+                fileName.innerText = "Dosya: " + fileInput.files[0].name;
+                fileName.style.color = "#6d83ff";
+            }
+        });
+    </script>
 
 </body>
 </html>
-
-
-

@@ -1,0 +1,255 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kapsül Mesaj</title>
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+html, body{
+    width:100%;
+    height:100%;
+    font-family:Segoe UI, Arial, sans-serif;
+    overflow:hidden;
+    color:white;
+}
+
+body{
+    position:relative;
+    background:#050814;
+}
+
+/* VIDEO BACKGROUND */
+.bg-video{
+    position:fixed;
+    top:0;
+    left:0;
+    width:100%;
+    height:100%;
+    object-fit:cover;
+    z-index:0;
+}
+
+/* OVERLAY */
+.bg-overlay{
+    position:fixed;
+    inset:0;
+    background:
+        linear-gradient(to right, rgba(5,8,20,.68) 0%, rgba(5,8,20,.42) 35%, rgba(5,8,20,.18) 65%, rgba(5,8,20,.30) 100%),
+        radial-gradient(circle at center, rgba(110,160,255,.08), transparent 45%);
+    z-index:1;
+}
+
+/* EXTRA GLOW */
+.bg-glow{
+    position:fixed;
+    inset:0;
+    background:
+        radial-gradient(circle at 20% 30%, rgba(120,180,255,.16), transparent 25%),
+        radial-gradient(circle at 80% 20%, rgba(180,120,255,.12), transparent 20%),
+        radial-gradient(circle at 70% 80%, rgba(90,200,255,.10), transparent 22%);
+    z-index:1;
+    pointer-events:none;
+}
+
+.hero{
+    position:relative;
+    z-index:2;
+    height:100vh;
+    display:flex;
+    align-items:center;
+    padding:0 7%;
+}
+
+.content{
+    max-width:620px;
+}
+
+.badge{
+    display:inline-flex;
+    align-items:center;
+    gap:10px;
+    padding:10px 18px;
+    margin-bottom:22px;
+    border-radius:999px;
+    background:rgba(255,255,255,.08);
+    border:1px solid rgba(255,255,255,.14);
+    backdrop-filter:blur(10px);
+    font-size:.95rem;
+    color:rgba(255,255,255,.88);
+    box-shadow:0 8px 20px rgba(0,0,0,.20);
+}
+
+.badge::before{
+    content:"✦";
+    color:#9fdcff;
+    font-size:1rem;
+}
+
+h1{
+    font-size:clamp(3rem, 5vw, 5.4rem);
+    line-height:1.02;
+    margin-bottom:22px;
+    font-weight:800;
+    letter-spacing:-1px;
+    text-shadow:0 8px 28px rgba(0,0,0,.35);
+}
+
+p{
+    font-size:1.15rem;
+    line-height:1.75;
+    color:rgba(255,255,255,.85);
+    margin-bottom:34px;
+    max-width:560px;
+}
+
+.actions{
+    display:flex;
+    flex-wrap:wrap;
+    gap:14px;
+    margin-bottom:22px;
+}
+
+.btn{
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    min-width:210px;
+    height:60px;
+    padding:0 24px;
+    border-radius:18px;
+    font-weight:700;
+    font-size:1.05rem;
+    text-decoration:none;
+    color:white;
+    border:1px solid rgba(255,255,255,.18);
+    transition:.28s ease;
+    backdrop-filter:blur(10px);
+}
+
+.btn-primary{
+    background:linear-gradient(135deg, rgba(124,92,255,.95), rgba(79,211,255,.88));
+    box-shadow:0 14px 30px rgba(55,120,255,.28);
+}
+
+.btn-primary:hover{
+    transform:translateY(-3px);
+    box-shadow:0 20px 40px rgba(55,120,255,.35);
+}
+
+.btn-secondary{
+    background:rgba(255,255,255,.08);
+    box-shadow:0 10px 25px rgba(0,0,0,.25);
+}
+
+.btn-secondary:hover{
+    transform:translateY(-3px);
+    background:rgba(255,255,255,.14);
+    box-shadow:0 16px 35px rgba(0,0,0,.32);
+}
+
+.links{
+    display:flex;
+    flex-wrap:wrap;
+    gap:18px;
+    align-items:center;
+    font-size:.98rem;
+    color:rgba(255,255,255,.72);
+}
+
+.links a{
+    color:#bfe7ff;
+    text-decoration:none;
+    font-weight:600;
+    transition:.2s;
+}
+
+.links a:hover{
+    color:white;
+    text-decoration:underline;
+}
+
+@media (max-width: 900px){
+    .hero{
+        padding:0 24px;
+    }
+
+    .content{
+        max-width:100%;
+    }
+
+    h1{
+        font-size:clamp(2.4rem, 9vw, 4rem);
+    }
+
+    p{
+        font-size:1rem;
+        line-height:1.65;
+    }
+
+    .actions{
+        flex-direction:column;
+        align-items:stretch;
+    }
+
+    .btn{
+        width:100%;
+        min-width:unset;
+    }
+
+    .links{
+        flex-direction:column;
+        align-items:flex-start;
+        gap:10px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<video autoplay muted loop playsinline preload="auto" class="bg-video">
+    <source src="{% static 'videos/video.mp4' %}" type="video/mp4">
+</video>
+
+<div class="bg-overlay"></div>
+<div class="bg-glow"></div>
+
+<section class="hero">
+    <div class="content">
+        <div class="badge">Dijital Zaman Kapsülü</div>
+
+        <h1>Geleceğe Bir<br>Mesaj Bırak</h1>
+
+        <p>
+            Zamanı aşan dijital kapsülüne mesajını bırak,
+            sevdiklerine gelecekte açılacak özel bir an armağan et.
+            Her mesaj, tam zamanı geldiğinde yeniden hayat bulsun.
+        </p>
+
+        <div class="actions">
+            <a href="{% url 'mesajlar:mesaj_olustur' %}" class="btn btn-primary">
+                Mesaj Oluştur
+            </a>
+
+            <a href="{% url 'mesajlar:login' %}" class="btn btn-secondary">
+                Giriş Yap
+            </a>
+        </div>
+
+        <div class="links">
+            <span>Hesabın yok mu?</span>
+            <a href="{% url 'mesajlar:register' %}">Kayıt Ol</a>
+        </div>
+    </div>
+</section>
+
+</body>
+</html>
